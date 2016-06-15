@@ -4,7 +4,7 @@
 #define Serial NilSerial
 
 //A semaphore with just one slot to be accessed.
-SEMAPHORE_DELC(sem, 1);
+SEMAPHORE_DECL(sem, 1);
 
 void CRITICAL_REGION(int led, int computingTime){
 
