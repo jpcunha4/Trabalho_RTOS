@@ -36,7 +36,7 @@ void CRITICAL_REGION(int led, int computingTime){
   Serial.println("Stoped running machine");
   digitalWrite(redLed,HIGH);
   Serial.println("Started fufilling the bottle");
-  nilThdSleepMilliseconds(5000);
+  nilThdSleepMilliseconds(10000);
   digitalWrite(redLed,LOW);
   Serial.println("Finished fulfilling the bottle\nMoved the third running machine");
   
@@ -48,7 +48,7 @@ NIL_WORKING_AREA(waRMachine1, 128);
 
 NIL_THREAD(RMachine1, arg){
   
-  uint32_t P = 1000,D = P, CT = 1000;
+  uint32_t P = 15000,D = P, CT = 5000;
   
   while(true){
   
@@ -66,7 +66,7 @@ NIL_THREAD(RMachine1, arg){
 NIL_WORKING_AREA(waRMachine2, 128);
 
 NIL_THREAD(RMachine2, arg){
-  uint32_t P = 1000,D = P, CT = 1000;
+  uint32_t P = 15000,D = P, CT = 5000;
   
   while(true){
   
