@@ -24,8 +24,11 @@ void CONTROL_SEM_LEDS(int signal){
   }
 }
 
-void CRITICAL_REGION(int led, int computingTime){
+int CRITICAL_REGION(int led, int computingTime){
   //This is the place where the thrid running machine and fullfil the bottle
+  
+  //This is an aperiodic activity and has 10 seconds for computing time
+  int CT = 10000;
   
   CONTROL_SEM_LEDS(0);
   
@@ -42,21 +45,22 @@ void CRITICAL_REGION(int led, int computingTime){
   
   nilSemSignal(&sem);
   CONTROL_SEM_LEDS(1);
+  return CT;
 }
 
 NIL_WORKING_AREA(waRMachine1, 128);
 
 NIL_THREAD(RMachine1, arg){
   
-  uint32_t P = 15000,D = P, CT = 5000;
+  uint32_t P = 30000,D = P, CT = 5000;
   
   while(true){
   
     msg_t test = nilSemWaitTimeout(&sem,P);
     
     if(test == NIL_MSG_OK){
-      CRITICAL_REGION(yellowLed,CT);
-      nilThdSleep(P-CT);
+      int waitCR = CRITICAL_REGION(yellowLed,CT);
+      nilThdSleepMilliseconds(P - CT - waitCR);
     }
   
   }
@@ -66,7 +70,7 @@ NIL_THREAD(RMachine1, arg){
 NIL_WORKING_AREA(waRMachine2, 128);
 
 NIL_THREAD(RMachine2, arg){
-  uint32_t P = 15000,D = P, CT = 5000;
+  uint32_t P = 30000,D = P, CT = 5000;
   
   while(true){
   
@@ -74,7 +78,7 @@ NIL_THREAD(RMachine2, arg){
     
     if(test == NIL_MSG_OK){
       CRITICAL_REGION(greenLed,CT);
-      nilThdSleep(P-CT);
+      nilThdSleepMilliseconds(P-CT);
     }
   
   }
